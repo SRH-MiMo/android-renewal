@@ -81,9 +81,9 @@ fun BottomNavigation(navController: NavController) {
                         if (selectedIndex == index) {
                             Box(
                                 modifier = Modifier
-                                    .width(20.dp)
-                                    .height(2.dp)
-                                    .background(Color.Magenta) // 하단 인디케이터 색상
+                                    .width(30.dp)
+                                    .height(3.dp)
+                                    .background(Color(0xFFAE00BD)) // 하단 인디케이터 색상
                             )
                         }
                     }

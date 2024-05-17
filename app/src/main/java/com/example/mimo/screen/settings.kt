@@ -14,20 +14,20 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mimo.component.BottomNavigation
 
 @Composable
-fun MainPage(navController: NavController) {
-        val text = remember { "메인페이지입니다." } // 상태 관리를 위해 remember를 사용하여 상태를 유지합니다.
+fun SettingsPage(navController: NavController) {
+
+        val text = remember { "세팅페이지입니다." } // 상태 관리를 위해 remember를 사용하여 상태를 유지합니다.
         Surface(
             modifier = Modifier
                 .fillMaxSize()
         ) {
             Text(text = text)
         }
-
 }
 
 @Preview
 @Composable
-fun MainPagePreview() {
+fun SettingView() {
     // Create a fake NavController for preview purposes
     val navController = rememberNavController()
     MainPage(navController = navController)

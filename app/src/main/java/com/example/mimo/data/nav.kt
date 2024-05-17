@@ -5,5 +5,6 @@ import androidx.compose.ui.graphics.painter.Painter
 
 data class Nav(
     val title: String,
-    val iconRes: Int // Resource ID를 사용
+    val iconRes: Int,
+    val route: String
 )

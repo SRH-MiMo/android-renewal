@@ -35,24 +35,15 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun MimoTheme(
-        darkTheme: Boolean = isSystemInDarkTheme(),
-        // Dynamic color is available on Android 12+
-        dynamicColor: Boolean = true,
-        content: @Composable () -> Unit
+    // 항상 검정 테마를 사용하도록 설정
+    darkTheme: Boolean = true,
+    content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+    val colorScheme = DarkColorScheme // 기본적으로는 검정 테마 사용
 
     MaterialTheme(
-            colorScheme = colorScheme,
-            typography = Typography,
-            content = content
+        colorScheme = colorScheme,
+        typography = Typography,
+        content = content
     )
 }

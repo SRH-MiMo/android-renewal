@@ -19,15 +19,21 @@ import com.example.mimo.component.BottomNavigation
 
 @Composable
 fun ChatPage(navController: NavController) {
-    Column (
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "민재야 일기장 만들어",
-            fontSize = 40.sp
-        )
-    }
+        val text = remember { "채팅 페이지 입니다." } // 상태 관리를 위해 remember를 사용하여 상태를 유지합니다.
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Column (
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "만들기 싫은데 ㅅㅂ",
+                    fontSize = 40.sp
+                )
+            }
+        }
 }
 
 @Preview

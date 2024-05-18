@@ -37,8 +37,6 @@ class MainActivity : ComponentActivity() {
 fun Nav() {
     val navController = rememberNavController()
     Scaffold(
-        modifier = Modifier
-            .background(Color.Black),
         bottomBar = {
             BottomNavigation(navController = navController)
         }

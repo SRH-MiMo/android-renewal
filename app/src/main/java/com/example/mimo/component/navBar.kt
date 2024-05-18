@@ -58,7 +58,6 @@ fun BottomNavigation(navController: NavController) {
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
 
     NavigationBar(
-        containerColor = Color.Black // NavigationBar의 배경색 설정
     ) {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
@@ -88,13 +87,11 @@ fun BottomNavigation(navController: NavController) {
                         }
                     }
                 },
-                colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Color.Transparent, // 선택된 항목의 배경색을 투명하게 설정
-                    selectedIconColor = Color.White, // 선택된 아이콘의 색상
-                    unselectedIconColor = Color.White, // 선택되지 않은 아이콘의 색상
-                    selectedTextColor = Color.White, // 선택된 텍스트의 색상
-                    unselectedTextColor = Color.White // 선택되지 않은 텍스트의 색상
-                )
+//                colors = NavigationBarItemDefaults.colors(
+//                   indicatorColor = Color.Transparent, // 선택된 항목의 배경색을 투명하게 설정
+//                    selectedIconColor = Color.White, // 선택된 아이콘의 색상
+//                    unselectedIconColor = Color.White, // 선택되지 않은 아이콘의 색상
+//                )
             )
         }
     }

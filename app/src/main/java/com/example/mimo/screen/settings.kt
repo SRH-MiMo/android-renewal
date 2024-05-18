@@ -1,5 +1,7 @@
 package com.example.mimo.screen
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -7,21 +9,29 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.mimo.component.BottomNavigation
 
 @Composable
 fun SettingsPage(navController: NavController) {
-
-        val text = remember { "세팅페이지입니다." } // 상태 관리를 위해 remember를 사용하여 상태를 유지합니다.
         Surface(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            Text(text = text)
+            Column (
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "민재야 세팅기능 만들어",
+                    fontSize = 40.sp
+                )
+            }
         }
 }
 
@@ -30,5 +40,5 @@ fun SettingsPage(navController: NavController) {
 fun SettingView() {
     // Create a fake NavController for preview purposes
     val navController = rememberNavController()
-    MainPage(navController = navController)
+    SettingsPage(navController = navController)
 }

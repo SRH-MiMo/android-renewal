@@ -43,7 +43,7 @@ fun Nav() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "MainPage",
+            startDestination = "Loginpage",
             modifier = Modifier
                 .padding(innerPadding)
         ) {

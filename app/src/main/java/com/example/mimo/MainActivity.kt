@@ -1,9 +1,11 @@
 package com.example.mimo
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -17,8 +19,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mimo.component.BottomNavigation
 import com.example.mimo.screen.ChatPage
 import com.example.mimo.screen.DiaryPage
+import com.example.mimo.screen.Loginpage
 import com.example.mimo.screen.MainPage
 import com.example.mimo.screen.SettingsPage // 수정: SettingsPage import 추가
+import com.example.mimo.screen.chat.TalkScreen
 import com.example.mimo.ui.theme.MimoTheme
 
 class MainActivity : ComponentActivity() {
@@ -33,6 +37,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Nav() {
     val navController = rememberNavController()
@@ -43,7 +48,7 @@ fun Nav() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "Loginpage",
+            startDestination = "LoginPage",
             modifier = Modifier
                 .padding(innerPadding)
         ) {
@@ -58,6 +63,12 @@ fun Nav() {
             }
             composable("DiaryPage") {
                 DiaryPage(navController = navController)
+            }
+            composable("LoginPage") {
+                Loginpage(navController = navController)
+            }
+            composable("TalkScreen") {
+                TalkScreen(navController = navController)
             }
         }
     }

@@ -42,9 +42,8 @@ import com.example.mimo.ui.theme.PurpleStart
 @Composable
 fun ChatPage(navController: NavController) {
     Surface(
-        color = Color.Black,
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
     ) {
         TopBar(name = "채팅 꿈 해몽")
         Column(

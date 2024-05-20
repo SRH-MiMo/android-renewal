@@ -42,7 +42,6 @@ import com.example.mimo.ui.theme.PurpleStart
 @Composable
 fun Loginpage(navController: NavController) {
     Surface(
-        color = Color.Black,
         modifier = Modifier
             .fillMaxSize()
     ) {

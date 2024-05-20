@@ -52,8 +52,8 @@ fun ChatPage(navController: NavController) {
         ) {
             Image(
                 modifier = Modifier
-                    .width(150.dp)
-                    .height(150.dp),
+                    .width(200.dp)
+                    .height(200.dp),
                 painter = painterResource(id = R.drawable.luna),
                 contentDescription = "달사진"
             )
@@ -63,7 +63,7 @@ fun ChatPage(navController: NavController) {
             Text(
                 text = "꿈 해몽 AI '루나'",
                 color = Color.White,
-                fontSize = 30.sp,
+                fontSize = 35.sp,
                 fontWeight = FontWeight.Bold
             )
 
@@ -73,7 +73,7 @@ fun ChatPage(navController: NavController) {
                 text = "꿈 내용을 입력해 꿈 해몽을 받아보세요!\n" +
                         "AI 루나가 당신의 꿈을 해석해드립니다!",
                 color = Color(0xB2FFFFFF),
-                fontSize = 10.sp
+                fontSize = 15.sp
             )
             Spacer(modifier = Modifier.height(40.dp))
 

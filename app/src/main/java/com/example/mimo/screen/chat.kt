@@ -57,7 +57,7 @@ fun ChatPage(navController: NavController) {
                 painter = painterResource(id = R.drawable.luna),
                 contentDescription = "달사진"
             )
-
+ 
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(

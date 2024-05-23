@@ -42,7 +42,6 @@ import com.example.mimo.ui.theme.PurpleStart
 @Composable
 fun Loginpage(navController: NavController) {
     Surface(
-        color = Color.Black,
         modifier = Modifier
             .fillMaxSize()
     ) {
@@ -61,7 +60,7 @@ fun Loginpage(navController: NavController) {
             Text(
                 text = "미모 - 미라클 모닝을 찾아서",
                 color = Color.White,
-                fontSize = 25.sp,
+                fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
@@ -70,8 +69,8 @@ fun Loginpage(navController: NavController) {
                 painter = painterResource(id = R.drawable.sky),
                 contentDescription = "하늘사진",
                 modifier = Modifier
-                    .width(250.dp)
-                    .height(250.dp)
+                    .width(300.dp)
+                    .height(300.dp)
             )
 
             Spacer(modifier = Modifier.height(20.dp))

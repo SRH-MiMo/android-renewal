@@ -14,16 +14,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.dreaminterpretationapp.DreamInterpretationApp
 import com.example.mimo.component.BottomNavigation
 import com.example.mimo.screen.ChatPage
 import com.example.mimo.screen.DiaryPage
 import com.example.mimo.screen.Loginpage
 import com.example.mimo.screen.MainPage
 import com.example.mimo.screen.SettingsPage // 수정: SettingsPage import 추가
+import com.example.mimo.screen.chat.DreamScreen
 import com.example.mimo.ui.theme.MimoTheme
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -66,12 +67,13 @@ fun Nav() {
                 Loginpage(navController = navController)
             }
             composable("TalkScreen") {
-                DreamInterpretationApp(navController = navController)
+                DreamScreen(navController = navController)
             }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {

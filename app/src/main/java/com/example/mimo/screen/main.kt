@@ -78,8 +78,7 @@ fun MainPage(navController: NavController) {
             ) {
                 Button(
                     onClick = {
-                        Log.d("Main", "민제야 만들어")
-                        Toast.makeText(context, "민재야 알람 만들어야겠지?", Toast.LENGTH_SHORT).show()
+                        navController.navigate("AlarmSettingScreen")
                     },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),

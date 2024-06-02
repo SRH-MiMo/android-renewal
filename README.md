@@ -1,1 +1,7 @@
 # 미모 - 미라클 모닝을 찾아서
+
+local.properties
+```env
+SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+SUPABASE_URL=YOUR_SUPABASE_URL
+```

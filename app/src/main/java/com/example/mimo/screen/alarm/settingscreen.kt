@@ -25,14 +25,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.text.TextStyle
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            AlarmSettingScreen()
-        }
-    }
-}
+//class MainActivity : ComponentActivity() {
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContent {
+//            AlarmSettingScreen()
+//        }
+//    }
+//}
 
 @Composable
 fun AlarmSettingScreen() {
@@ -74,7 +74,7 @@ fun AlarmSettingScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
-           colors = ButtonDefaults.buttonColors(backgroundColor = Color.Magenta)
+//           colors = ButtonDefaults.buttonColors(backgroundColor = Color.Magenta)
         ) {
             Text(text = "저장하기", color = Color.White, fontSize = 16.sp)
         }
@@ -128,13 +128,13 @@ fun CommentInput(comment: TextFieldValue, onCommentChange: (TextFieldValue) -> U
             .padding(8.dp),
         textStyle = TextStyle(color = Color.White),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-        colors = TextFieldDefaults.textFieldColors(
-            textColor = Color.White,
-            backgroundColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            cursorColor = Color.White
-        )
+//        colors = TextFieldDefaults.textFieldColors(
+//            textColor = Color.White,
+//            backgroundColor = Color.Transparent,
+//            focusedIndicatorColor = Color.Transparent,
+//            unfocusedIndicatorColor = Color.Transparent,
+//            cursorColor = Color.White
+//        )
 
     )
 }

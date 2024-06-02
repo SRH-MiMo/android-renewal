@@ -91,7 +91,7 @@ fun Loginpage(navController: NavController) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Column {
-                InsertButton()
+//                InsertButton()
                 GoogleSignInButton(navController = navController)
 
             }

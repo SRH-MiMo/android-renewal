@@ -21,7 +21,10 @@ import com.example.mimo.screen.DiaryPage
 import com.example.mimo.screen.Loginpage
 import com.example.mimo.screen.MainPage
 import com.example.mimo.screen.SettingsPage // 수정: SettingsPage import 추가
-import com.example.mimo.screen.chat.DreamScreen
+import com.example.mimo.screen.alarm.AlarmSettingScreen
+import com.example.mimo.screen.setting.AccountScreen
+import com.example.mimo.screen.setting.SettingScreen
+import com.example.mimo.screen.setting.TvConnectScreen
 import com.example.mimo.ui.theme.MimoTheme
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
@@ -81,8 +84,19 @@ fun Nav() {
             composable("LoginPage") {
                 Loginpage(navController = navController)
             }
-            composable("TalkScreen") {
-                DreamScreen(navController = navController)
+
+            composable("AlarmSettingScreen"){
+                AlarmSettingScreen(navController = navController)
+            }
+            composable("TvConnectScreen"){
+                TvConnectScreen(navController = navController)
+            }
+            composable("SettingPage"){
+                SettingScreen(navController = navController)
+            }
+            composable("AccountPage"){
+                AccountScreen(navController = navController)
+
             }
         }
     }

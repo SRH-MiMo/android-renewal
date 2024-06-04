@@ -82,6 +82,7 @@ fun MainPage(navController: NavController) {
             ) {
                 Button(
                     onClick = {
+
                         val session = supabase.auth.currentSessionOrNull()
 
                         println(session?.user?.id)

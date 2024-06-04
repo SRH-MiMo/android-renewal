@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier // 수정: Modifier import 추가
 import androidx.compose.ui.tooling.preview.Preview
+
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -25,6 +26,20 @@ import com.example.mimo.screen.setting.AccountScreen
 import com.example.mimo.screen.setting.SettingScreen
 import com.example.mimo.screen.setting.TvConnectScreen
 import com.example.mimo.ui.theme.MimoTheme
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.gotrue.Auth
+import io.github.jan.supabase.postgrest.Postgrest
+
+
+
+val supabase = createSupabaseClient(
+    supabaseUrl = BuildConfig.SUPABASE_URL,
+    supabaseKey = BuildConfig.SUPABASE_ANON_KEY
+) {
+    install(Auth)
+    install(Postgrest)
+}
+
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -50,7 +65,7 @@ fun Nav() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "LoginPage",
+            startDestination = "MainPage",
             modifier = Modifier
                 .padding(innerPadding)
         ) {
@@ -69,6 +84,7 @@ fun Nav() {
             composable("LoginPage") {
                 Loginpage(navController = navController)
             }
+
             composable("AlarmSettingScreen"){
                 AlarmSettingScreen(navController = navController)
             }
@@ -80,6 +96,7 @@ fun Nav() {
             }
             composable("AccountPage"){
                 AccountScreen(navController = navController)
+
             }
         }
     }

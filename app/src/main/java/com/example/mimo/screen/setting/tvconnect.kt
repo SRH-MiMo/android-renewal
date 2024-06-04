@@ -4,11 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,33 +76,39 @@ fun DeviceSelectScreen() {
         val deviceList = listOf("JMIN TV", "3-6 TV", "tkffuwnj", "a12sjs29", "국재윤 명칭이")
 
         deviceList.forEach { device ->
-            DeviceOption(device)
+            DeviceButton(device)
             Divider(color = Color.Gray, thickness = 1.dp)
         }
     }
 }
 
 @Composable
-fun DeviceOption(deviceName: String) {
-    Row(
+fun DeviceButton(deviceName: String) {
+    Button(
+        onClick = { /* Handle device selection */ },
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1F1F1F)),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
-            .clickable { /* Handle device selection */ },
-        verticalAlignment = Alignment.CenterVertically
+            .padding(vertical = 8.dp) // Adjust padding if needed
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.tv), // 디바이스 아이콘
-            contentDescription = null,
-            modifier = Modifier.size(24.dp),
-            contentScale = ContentScale.Crop
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = deviceName,
-            fontSize = 18.sp,
-            color = Color.White
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.tv), // 디바이스 아이콘
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = deviceName,
+                fontSize = 18.sp,
+                color = Color.White
+            )
+        }
     }
 }
 

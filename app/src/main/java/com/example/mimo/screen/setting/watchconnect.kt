@@ -4,19 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mimo.R
 
-class watchselectActivity : ComponentActivity() {
+class WatchSelectActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -37,7 +26,7 @@ class watchselectActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = Color(0xFF121212) // 어두운 배경색
             ) {
-                watchselectActivity()
+                WatchSelectScreen()
             }
         }
     }
@@ -87,36 +76,41 @@ fun WatchSelectScreen() {
         val deviceList = listOf("WATCH", "JMIN's APPLE WATCH")
 
         deviceList.forEach { device ->
-            WatchSelectOption(device)
+            WatchSelectButton(device)
             Divider(color = Color.Gray, thickness = 1.dp)
         }
     }
 }
 
 @Composable
-fun WatchSelectOption(deviceName: String) {
-    Row(
+fun WatchSelectButton(deviceName: String) {
+    Button(
+        onClick = { /* Handle device selection */ },
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1F1F1F)),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
-            .clickable { /* Handle device selection */ },
-        verticalAlignment = Alignment.CenterVertically
+            .padding(vertical = 8.dp) // Adjust padding if needed
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.watch), // 워치 아이콘으로 변경
-            contentDescription = null,
-            modifier = Modifier.size(24.dp),
-            contentScale = ContentScale.Crop
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = deviceName,
-            fontSize = 18.sp,
-            color = Color.White
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.watch), // 워치 아이콘으로 변경
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = deviceName,
+                fontSize = 18.sp,
+                color = Color.White
+            )
+        }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -128,4 +122,3 @@ fun WatchSelectScreenPreview() {
         WatchSelectScreen()
     }
 }
-

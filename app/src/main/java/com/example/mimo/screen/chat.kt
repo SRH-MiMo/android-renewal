@@ -33,11 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.mimo.R
 import com.example.mimo.component.BottomNavigation
 import com.example.mimo.component.TopBar
 import com.example.mimo.ui.theme.PurpleEnd
 import com.example.mimo.ui.theme.PurpleStart
+import com.example.mimo.R
 
 @Composable
 fun ChatPage(navController: NavController) {

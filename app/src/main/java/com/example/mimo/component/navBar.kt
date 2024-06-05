@@ -26,8 +26,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.mimo.Nav
-import com.example.mimo.R
 import com.example.mimo.data.Nav
+import com.example.mimo.R
 
 
 val items = listOf(

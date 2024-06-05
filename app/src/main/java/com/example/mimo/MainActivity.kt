@@ -28,6 +28,7 @@ import com.example.mimo.screen.Loginpage
 import com.example.mimo.screen.MainPage
 import com.example.mimo.screen.SettingsPage // 수정: SettingsPage import 추가
 import com.example.mimo.screen.alarm.AlarmSettingScreen
+import com.example.mimo.screen.chat.DreamScreen
 import com.example.mimo.screen.diary.AddDiaryScreen
 import com.example.mimo.screen.diary.DiaryScreen
 import com.example.mimo.screen.diary.model.DiaryState
@@ -103,6 +104,9 @@ fun Nav(state: DiaryState, viewModel: DiaryViewModel) {
             }
             composable("ChatPage") {
                 ChatPage(navController = navController)
+            }
+            composable("TalkScreen") {
+                DreamScreen(navController = navController)
             }
             composable("SettingPage") { // 수정: 목적지 이름 변경
                 SettingsPage(navController = navController)

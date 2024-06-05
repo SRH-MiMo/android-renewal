@@ -16,7 +16,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mimo.component.BottomNavigation
 import com.example.mimo.screen.ChatPage
-import com.example.mimo.screen.DiaryPage
 import com.example.mimo.screen.Loginpage
 import com.example.mimo.screen.MainPage
 import com.example.mimo.screen.SettingsPage // 수정: SettingsPage import 추가
@@ -59,9 +58,6 @@ fun Nav() {
             }
             composable("SettingPage") { // 수정: 목적지 이름 변경
                 SettingsPage(navController = navController)
-            }
-            composable("DiaryPage") {
-                DiaryPage(navController = navController)
             }
             composable("LoginPage") {
                 Loginpage(navController = navController)

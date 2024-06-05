@@ -24,7 +24,6 @@ import androidx.room.Room
 import com.example.mimo.component.BottomNavigation
 import com.example.mimo.data.Diary.DiariesDatabase
 import com.example.mimo.screen.ChatPage
-import com.example.mimo.screen.DiaryPage
 import com.example.mimo.screen.Loginpage
 import com.example.mimo.screen.MainPage
 import com.example.mimo.screen.SettingsPage // 수정: SettingsPage import 추가

@@ -2,6 +2,7 @@ package com.example.mimo.screen.diary
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -26,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +44,8 @@ import com.example.mimo.component.TopBar
 import com.example.mimo.data.Diary.Diary
 import com.example.mimo.screen.diary.model.DiaryEvent
 import com.example.mimo.screen.diary.model.DiaryState
+import com.example.mimo.ui.theme.PurpleEnd
+import com.example.mimo.ui.theme.PurpleStart
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +60,6 @@ fun DiaryScreen(
         },
 
 
-
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 state.title.value = ""
@@ -65,14 +70,16 @@ fun DiaryScreen(
             }
         }
     ) { paddingValues ->
+        Spacer(modifier = Modifier.height(50.dp))
 
         LazyColumn(
 
             contentPadding = paddingValues,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp),
-                //.background(color = Color.Black),
+                .padding(8.dp)
+                .padding(20.dp),
+            //.background(color = Color.Black),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
@@ -89,7 +96,6 @@ fun DiaryScreen(
     }
 
 }
-
 
 
 @Preview(showBackground = true)

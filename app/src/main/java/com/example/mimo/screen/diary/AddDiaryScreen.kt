@@ -1,6 +1,8 @@
 package com.example.mimo.screen.diary
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +24,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mimo.screen.diary.model.DiaryEvent
 import com.example.mimo.screen.diary.model.DiaryState
+import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.O)
+val localDate: LocalDate = LocalDate.now()
+
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddDiaryScreen(
@@ -39,7 +46,7 @@ fun AddDiaryScreen(
                     DiaryEvent.SaveNote(
                         title = state.title.value,
                         description = state.description.value,
-                        dateAdded = System.currentTimeMillis()
+                        dateAdded = localDate.toString()
                     ))
                 navController.popBackStack()
             }) {
@@ -96,7 +103,6 @@ fun AddDiaryScreen(
     }
 
 }
-
 
 
 

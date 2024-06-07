@@ -26,12 +26,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.mimo.R
+import com.example.mimo.component.DiaryItem
+import com.example.mimo.component.TopBar
+import com.example.mimo.data.Diary.Diary
 import com.example.mimo.screen.diary.model.DiaryEvent
 import com.example.mimo.screen.diary.model.DiaryState
 
@@ -42,26 +48,12 @@ fun DiaryScreen(
     navController: NavController,
     onEvent: (DiaryEvent) -> Unit
 ) {
-
     Scaffold(
         topBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp)
-                    .background(MaterialTheme.colorScheme.primary)
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(id = R.string.app_name),
-                    modifier = Modifier.weight(1f),
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
+            TopBar(name = "하루 보고서")
         },
+
+
 
         floatingActionButton = {
             FloatingActionButton(onClick = {
@@ -75,10 +67,12 @@ fun DiaryScreen(
     ) { paddingValues ->
 
         LazyColumn(
+
             contentPadding = paddingValues,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp),
+                //.background(color = Color.Black),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
@@ -96,54 +90,25 @@ fun DiaryScreen(
 
 }
 
+
+
+@Preview(showBackground = true)
 @Composable
-fun DiaryItem(
-    state: DiaryState,
-    index: Int,
-    onEvent: (DiaryEvent) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(12.dp)
-    ) {
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
+fun DiaryScreenPreview() {
+    val sampleDiaries = listOf(
+        Diary(
+            title = "Sample Diary 1",
+            description = "Description 1",
+            dateAdded = "2024년 5월 39일"
+        )
+    )
 
-            Text(
-                text = state.notes[index].title,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            )
+    val sampleState = DiaryState(notes = sampleDiaries)
 
-            Spacer(modifier = Modifier.height(8.dp))
+    DiaryScreen(
+        state = sampleState,
+        navController = rememberNavController(),
+        onEvent = {}
+    )
 
-            Text(
-                text = state.notes[index].description,
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            )
-
-        }
-
-        IconButton(
-            onClick = {
-                onEvent(DiaryEvent.DeleteNote(state.notes[index]))
-            }
-        ) {
-
-            Icon(
-                imageVector = Icons.Rounded.Delete,
-                contentDescription = "Delete Note",
-                modifier = Modifier.size(35.dp),
-                tint = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-
-        }
-
-    }
 }

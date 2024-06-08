@@ -1,16 +1,20 @@
 package com.example.mimo.screen.setting
 
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -19,11 +23,33 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.mimo.R
-
+import com.example.mimo.supabase
+import io.github.jan.supabase.exceptions.RestException
+import io.github.jan.supabase.gotrue.auth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun AccountScreen(navController: NavController) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    val logout: () -> Unit = {
+        coroutineScope.launch {
+            try {
+                supabase.auth.signOut()
+
+                Toast.makeText(context, "로그아웃 됌", Toast.LENGTH_SHORT).show()
+
+                navController.navigate("LoginPage")
+            } catch (e: RestException) {
+                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,9 +69,7 @@ fun AccountScreen(navController: NavController) {
             // Handle account change
         }
         Divider(color = Color.Gray, thickness = 1.dp)
-        AccountButton("로그아웃", R.drawable.door) {
-            // Handle logout
-        }
+        AccountButton("로그아웃", R.drawable.door, onClick = logout)
         Divider(color = Color.Gray, thickness = 1.dp)
         TextButton(
             onClick = { /* Handle delete account */ },

@@ -2,6 +2,7 @@ package com.example.mimo
 
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,7 +27,6 @@ import com.example.mimo.data.Diary.DiariesDatabase
 import com.example.mimo.screen.ChatPage
 import com.example.mimo.screen.Loginpage
 import com.example.mimo.screen.MainPage
-import com.example.mimo.screen.SettingsPage // 수정: SettingsPage import 추가
 import com.example.mimo.screen.alarm.AlarmSettingScreen
 import com.example.mimo.screen.chat.DreamScreen
 import com.example.mimo.screen.diary.AddDiaryScreen
@@ -39,8 +39,8 @@ import com.example.mimo.screen.setting.TvConnectScreen
 import com.example.mimo.ui.theme.MimoTheme
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
+import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.postgrest.Postgrest
-
 
 
 val supabase = createSupabaseClient(
@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
         ).build()
     }
 
-    private val viewModel by viewModels<DiaryViewModel> (
+    private val viewModel by viewModels<DiaryViewModel>(
         factoryProducer = {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -88,6 +88,17 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Nav(state: DiaryState, viewModel: DiaryViewModel) {
     val navController = rememberNavController()
+
+    // 유저 로그인 정보 (비 로그인시 null)
+    val session = supabase.auth.currentSessionOrNull()
+
+    //첫 시작 위치 결정
+    val startDestination = if (session?.user != null) {
+        "MainPage"
+    } else {
+        "LoginPage"
+    }
+
     Scaffold(
         bottomBar = {
             BottomNavigation(navController = navController)
@@ -95,7 +106,7 @@ fun Nav(state: DiaryState, viewModel: DiaryViewModel) {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "MainPage",
+            startDestination = startDestination,
             modifier = Modifier
                 .padding(innerPadding)
         ) {
@@ -107,9 +118,6 @@ fun Nav(state: DiaryState, viewModel: DiaryViewModel) {
             }
             composable("TalkScreen") {
                 DreamScreen(navController = navController)
-            }
-            composable("SettingPage") { // 수정: 목적지 이름 변경
-                SettingsPage(navController = navController)
             }
             composable("DiaryPage") {
                 DiaryScreen(
@@ -128,16 +136,16 @@ fun Nav(state: DiaryState, viewModel: DiaryViewModel) {
             composable("LoginPage") {
                 Loginpage(navController = navController)
             }
-            composable("AlarmSettingScreen"){
+            composable("AlarmSettingScreen") {
                 AlarmSettingScreen(navController = navController)
             }
-            composable("TvConnectScreen"){
+            composable("TvConnectScreen") {
                 TvConnectScreen(navController = navController)
             }
-            composable("SettingPage"){
+            composable("SettingPage") {
                 SettingScreen(navController = navController)
             }
-            composable("AccountPage"){
+            composable("AccountPage") {
                 AccountScreen(navController = navController)
             }
         }

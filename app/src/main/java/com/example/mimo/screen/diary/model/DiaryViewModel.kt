@@ -1,5 +1,7 @@
 package com.example.mimo.screen.diary.model
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -13,6 +15,11 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+@RequiresApi(Build.VERSION_CODES.O)
+val localDate: LocalDate = LocalDate.now()
 
 class DiaryViewModel(
     private val dao: DiaryDao
@@ -35,6 +42,7 @@ class DiaryViewModel(
                 notes = notes
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DiaryState())
+    @RequiresApi(Build.VERSION_CODES.O)
     fun onEvent(event: DiaryEvent) {
         when (event) {
             is DiaryEvent.DeleteNote -> {
@@ -46,7 +54,7 @@ class DiaryViewModel(
                 val diary = Diary(
                     title = state.value.title.value,
                     description = state.value.description.value,
-                    dateAdded = System.currentTimeMillis()
+                    dateAdded = localDate.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"))
                 )
 
                 viewModelScope.launch {

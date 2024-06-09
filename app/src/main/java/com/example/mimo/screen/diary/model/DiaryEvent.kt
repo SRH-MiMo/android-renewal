@@ -9,6 +9,6 @@ sealed interface DiaryEvent {
     data class SaveNote(
         val title: String,
         val description: String,
-        val dateAdded: Long,
+        val dateAdded: String,
     ): DiaryEvent
 }

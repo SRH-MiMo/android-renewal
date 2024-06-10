@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.lockscreen.LockScreen
 import com.example.mimo.component.BottomNavigation
 import com.example.mimo.screen.ChatPage
 import com.example.mimo.screen.DiaryPage
@@ -29,8 +30,6 @@ import com.example.mimo.ui.theme.MimoTheme
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.postgrest.Postgrest
-
-
 
 val supabase = createSupabaseClient(
     supabaseUrl = BuildConfig.SUPABASE_URL,
@@ -96,8 +95,14 @@ fun Nav() {
             }
             composable("AccountPage"){
                 AccountScreen(navController = navController)
-
             }
+            composable("LockScreen"){
+                LockScreen(navController = navController)
+            }
+            composable("AlarmSettingScreen"){
+                AlarmSettingScreen(navController = navController)
+            }
+
         }
     }
 }

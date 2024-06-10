@@ -68,51 +68,53 @@ fun MainPage(navController: NavController) {
             val context = LocalContext.current
 
             Box(
-                modifier = Modifier
-                    .width(400.dp)
-                    .height(90.dp)
-                    .padding(16.dp)
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(PurpleStart, PurpleEnd)
+                    modifier = Modifier
+                        .width(400.dp)
+                        .height(90.dp)
+                        .padding(16.dp)
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(PurpleStart, PurpleEnd)
+                            ),
+                            shape = RoundedCornerShape(10.dp)
                         ),
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-                contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center
             ) {
-                Button(
-                    onClick = {
+            Button(
+                onClick = {
 
-                        val session = supabase.auth.currentSessionOrNull()
+//                        val session = supabase.auth.currentSessionOrNull()
+//
+//                        println(session?.user?.id)
+//
+//                        if (session?.user != null) {
+//                            Toast.makeText(context, "로그인 상태: ${session.user?.email}", Toast.LENGTH_LONG).show()
+//                        }else{
+//                            navController.navigate("LoginPage")
+//                        }
 
-                        println(session?.user?.id)
+                    navController.navigate("AlarmSettingScreen")
 
-                        if (session?.user != null) {
-                            Toast.makeText(context, "로그인 상태: ${session.user?.email}", Toast.LENGTH_LONG).show()
-                        }else{
-                            navController.navigate("LoginPage")
-                        }
-
-
-
-                    },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Text(
-                        text = "시작하기",
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            color = Color.White, // Assuming white text color
-                            fontWeight = FontWeight.Bold
-                        )
+                },
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text(
+                    text = "시작하기",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        color = Color.White, // Assuming white text color
+                        fontWeight = FontWeight.Bold
                     )
-                }
+                )
             }
+        }
         }
     }
 }
+
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview

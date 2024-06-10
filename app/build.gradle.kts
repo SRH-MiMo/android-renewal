@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("plugin.serialization") version "1.9.0"
+    id("kotlin-kapt")
 }
 
 val properties = Properties().apply {
@@ -106,6 +107,9 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.4.0")
 
 
+    val roomVersion = "2.6.0"
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
 }
 
 

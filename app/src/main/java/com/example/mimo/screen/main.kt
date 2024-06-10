@@ -1,5 +1,6 @@
 package com.example.mimo.screen
 
+import android.content.ContentValues.TAG
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
@@ -36,8 +37,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mimo.component.TopBar
 import com.example.mimo.R
 import androidx.compose.ui.text.TextStyle
+import com.example.mimo.supabase
 import com.example.mimo.ui.theme.PurpleEnd
 import com.example.mimo.ui.theme.PurpleStart
+import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.gotrue.providers.builtin.IDToken
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -78,8 +82,18 @@ fun MainPage(navController: NavController) {
             ) {
                 Button(
                     onClick = {
-                        Log.d("Main", "민제야 만들어")
-                        Toast.makeText(context, "민재야 알람 만들어야겠지?", Toast.LENGTH_SHORT).show()
+                        val session = supabase.auth.currentSessionOrNull()
+
+                        if (session?.user != null) {
+                            Toast.makeText(
+                                context,
+                                "로그인 상태: ${session.user?.email}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            navController.navigate("AlarmSettingScreen")
+                        } else {
+                            navController.navigate("LoginPage")
+                        }
                     },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),

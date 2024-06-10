@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.lockscreen.LockScreen
 import androidx.room.Room
 import com.example.mimo.component.BottomNavigation
 import com.example.mimo.data.Diary.DiariesDatabase
@@ -41,7 +42,6 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.postgrest.Postgrest
-
 
 val supabase = createSupabaseClient(
     supabaseUrl = BuildConfig.SUPABASE_URL, //BuildConfig.SUPABASE_URL,
@@ -148,6 +148,13 @@ fun Nav(state: DiaryState, viewModel: DiaryViewModel) {
             composable("AccountPage") {
                 AccountScreen(navController = navController)
             }
+            composable("LockScreen"){
+                LockScreen(navController = navController)
+            }
+            composable("AlarmSettingScreen"){
+                AlarmSettingScreen(navController = navController)
+            }
+
         }
     }
 }

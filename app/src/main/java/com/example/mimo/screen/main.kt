@@ -107,11 +107,13 @@ fun MainPage(navController: NavController) {
                             fontWeight = FontWeight.Bold
                         )
                     )
+                
                 }
             }
         }
     }
 }
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview

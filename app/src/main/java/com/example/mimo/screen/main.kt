@@ -68,17 +68,17 @@ fun MainPage(navController: NavController) {
             val context = LocalContext.current
 
             Box(
-                    modifier = Modifier
-                        .width(400.dp)
-                        .height(90.dp)
-                        .padding(16.dp)
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(PurpleStart, PurpleEnd)
-                            ),
-                            shape = RoundedCornerShape(10.dp)
+                modifier = Modifier
+                    .width(400.dp)
+                    .height(90.dp)
+                    .padding(16.dp)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(PurpleStart, PurpleEnd)
                         ),
-            contentAlignment = Alignment.Center
+                        shape = RoundedCornerShape(10.dp)
+                    ),
+                contentAlignment = Alignment.Center
             ) {
                 Button(
                     onClick = {
@@ -107,13 +107,12 @@ fun MainPage(navController: NavController) {
                             fontWeight = FontWeight.Bold
                         )
                     )
-                )
+                
+                }
             }
-        }
         }
     }
 }
-
 
 
 @RequiresApi(Build.VERSION_CODES.O)

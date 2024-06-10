@@ -146,7 +146,7 @@ fun AddDiaryScreen(
             TextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(500.dp)
+                    .height(300.dp)
                     .padding(16.dp),
                 value = state.description.value,
                 onValueChange = {

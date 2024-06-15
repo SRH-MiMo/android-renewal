@@ -120,7 +120,6 @@ fun AlarmSettingScreen(navController: NavController) {
         }
     }
 }
-
 @Composable
 fun AlarmTimePicker(
     hour: Int,

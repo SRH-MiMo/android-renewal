@@ -77,10 +77,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (PermissionUtil.alertPermissionCheck(this)) {
-            PermissionUtil.onObtainingPermissionOverlayWindow(this)
-        }
-
         enableEdgeToEdge()
         setContent {
             MimoTheme {

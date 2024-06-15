@@ -29,7 +29,9 @@ import com.example.mimo.screen.ChatPage
 import com.example.mimo.screen.Loginpage
 import com.example.mimo.screen.MainPage
 import com.example.mimo.screen.alarm.AlarmSettingScreen
+import com.example.mimo.screen.alarm.BellScreen
 import com.example.mimo.screen.alarm.UnLockScreen
+import com.example.mimo.screen.alarm.WakeUpPage
 import com.example.mimo.screen.chat.DreamScreen
 import com.example.mimo.screen.diary.AddDiaryScreen
 import com.example.mimo.screen.diary.DiaryScreen
@@ -164,6 +166,12 @@ fun Nav(state: DiaryState, viewModel: DiaryViewModel) {
             }
             composable("UnLockScreen"){
                 UnLockScreen(navController = navController)
+            }
+            composable("WakeUp"){
+                WakeUpPage(navController = navController)
+            }
+            composable("BellPage"){
+                BellScreen(navController = navController)
             }
         }
     }

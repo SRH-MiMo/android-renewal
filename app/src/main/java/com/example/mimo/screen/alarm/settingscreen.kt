@@ -1,15 +1,20 @@
 package com.example.mimo.screen.alarm
 
-import android.os.Bundle
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.icu.util.Calendar
+import android.os.Build
+import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
@@ -20,20 +25,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.mimo.R
+import java.time.format.DateTimeFormatter
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -106,8 +108,8 @@ fun AlarmSettingScreen(navController: NavController) {
         Button(
             onClick = {
                 Toast.makeText(context, period + " "+ hour + " " + minute, Toast.LENGTH_SHORT).show()
-                navController.navigate("LockScreen")
                 isAlarmSaved = true
+                addAlarm(context, hour, minute, period)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -233,6 +235,74 @@ fun CommentInput(comment: TextFieldValue, onCommentChange: (TextFieldValue) -> U
         }
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.S)
+private fun canScheduleExactAlarms(context: Context): Boolean {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    return alarmManager.canScheduleExactAlarms()
+}
+
+@RequiresApi(Build.VERSION_CODES.S)
+private fun requestExactAlarmPermission(context: Context) {
+    val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+    context.startActivity(intent)
+}
+
+fun addAlarm(context: Context, hour: Int, minute: Int, period: String) {
+    Toast.makeText(context, "알람 예약 함수 실행됨", Toast.LENGTH_SHORT).show()
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmReceiver::class.java)
+    val pIntent = PendingIntent.getBroadcast(
+        context, 0, intent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    val cal = Calendar.getInstance().apply {
+        timeInMillis = System.currentTimeMillis()
+        set(Calendar.HOUR_OF_DAY, if (period == "오전") hour % 12 else (hour % 12) + 12)
+        set(Calendar.MINUTE, minute)
+        set(Calendar.SECOND, 0)
+        if (before(Calendar.getInstance())) {
+            add(Calendar.DAY_OF_MONTH, 1)
+        }
+    }
+    Toast.makeText(context, "알람 일정 등록", Toast.LENGTH_SHORT).show()
+    try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (canScheduleExactAlarms(context)) {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    cal.timeInMillis,
+                    pIntent
+                )
+                Toast.makeText(context, "정확한 알람이 설정됨", Toast.LENGTH_SHORT).show()
+            } else {
+                requestExactAlarmPermission(context)
+                Toast.makeText(context, "정확한 알람 설정을 위해 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                cal.timeInMillis,
+                pIntent
+            )
+            Toast.makeText(context, "정확한 알람이 설정됨", Toast.LENGTH_SHORT).show()
+        }
+    } catch (e: SecurityException) {
+        Toast.makeText(context, "알람 설정 권한이 필요합니다: ${e.message}", Toast.LENGTH_SHORT).show()
+    }
+}
+
+
+class AlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        if (intent != null) {
+            // 넘어가는 로직 만드셈
+        }
+    }
+}
+
+
 
 @Preview(showBackground = true)
 @Composable

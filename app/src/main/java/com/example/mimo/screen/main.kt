@@ -82,19 +82,23 @@ fun MainPage(navController: NavController) {
             ) {
                 Button(
                     onClick = {
-                        val session = supabase.auth.currentSessionOrNull()
-
-                        if (session?.user != null) {
-                            Toast.makeText(
-                                context,
-                                "로그인 상태: ${session.user?.email}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                            navController.navigate("AlarmSettingScreen")
-                        } else {
-                            navController.navigate("LoginPage")
-                        }
+                        navController.navigate("AlarmSettingScreen")
                     },
+//                    onClick = {
+//                        val session = supabase.auth.currentSessionOrNull()
+//
+//                        if (session?.user != null) {
+//                            Toast.makeText(
+//                                context,
+//                                "로그인 상태: ${session.user?.email}",
+//                                Toast.LENGTH_LONG
+//                            ).show()
+//                            navController.navigate("AlarmSettingScreen")
+//                        } else {
+//                            navController.navigate("LoginPage")
+//                        }
+//                        navController.navigate("AlarmSettingScreen")
+//                    },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     modifier = Modifier.fillMaxSize()

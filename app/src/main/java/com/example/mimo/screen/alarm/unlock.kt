@@ -49,7 +49,7 @@ fun UnLockScreen(navController: NavController) {
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
                     .background(
-                        color = Color.Black.copy(alpha = 0.5f),
+                        color = Color.White.copy(alpha = 0.5f),
                         shape = RoundedCornerShape(8.dp)
                     ),
                 placeholder = {

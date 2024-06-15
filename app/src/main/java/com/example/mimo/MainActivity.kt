@@ -54,9 +54,6 @@ val supabase = createSupabaseClient(
 
 //
 
-
-
-
 class MainActivity : ComponentActivity() {
     private val database by lazy {
         Room.databaseBuilder(

@@ -34,8 +34,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.mimo.MainActivity
 import java.time.format.DateTimeFormatter
 
+class LockReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        val activityIntent = Intent(context, MainActivity::class.java)
+        activityIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        activityIntent.putExtra("showBellScreen", true)
+        context?.startActivity(activityIntent)
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -54,10 +54,6 @@ val supabase = createSupabaseClient(
     install(Postgrest)
 }
 
-//
-
-
-
 
 class MainActivity : ComponentActivity() {
     private val database by lazy {

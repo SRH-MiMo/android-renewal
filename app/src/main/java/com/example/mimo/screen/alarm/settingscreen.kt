@@ -1,9 +1,11 @@
 package com.example.mimo.screen.alarm
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,11 +35,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.mimo.LockServiceManager
 import com.example.mimo.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlarmSettingScreen(navController: NavController) {
+
+
+
+
+
 
     val context = LocalContext.current
 
@@ -106,8 +114,9 @@ fun AlarmSettingScreen(navController: NavController) {
         Button(
             onClick = {
                 Toast.makeText(context, period + " "+ hour + " " + minute, Toast.LENGTH_SHORT).show()
-                navController.navigate("LockScreen")
+
                 isAlarmSaved = true
+
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -120,6 +129,9 @@ fun AlarmSettingScreen(navController: NavController) {
         }
     }
 }
+
+
+
 @Composable
 fun AlarmTimePicker(
     hour: Int,

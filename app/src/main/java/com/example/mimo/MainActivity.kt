@@ -1,7 +1,12 @@
 package com.example.mimo
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,11 +15,9 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier // 수정: Modifier import 추가
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
@@ -54,6 +57,23 @@ val supabase = createSupabaseClient(
 
 //
 
+private const val REQ_CODE_OVERLAY_PERMISSION: Int = 0
+
+object PermissionUtil {
+    fun onObtainingPermissionOverlayWindow(context: Activity) {
+        val intent = Intent(
+            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+            Uri.parse("package:" + context.packageName)
+        )
+        context.startActivityForResult(intent, REQ_CODE_OVERLAY_PERMISSION)
+    }
+
+
+    fun alertPermissionCheck(context: Context?): Boolean {
+        return !Settings.canDrawOverlays(context)
+    }
+}
+
 class MainActivity : ComponentActivity() {
     private val database by lazy {
         Room.databaseBuilder(
@@ -73,17 +93,37 @@ class MainActivity : ComponentActivity() {
         }
     )
 
+     lateinit var lockServiceManager: LockServiceManager
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (PermissionUtil.alertPermissionCheck(this)) {
+            PermissionUtil.onObtainingPermissionOverlayWindow(this)
+        }
+
+        lockServiceManager = LockServiceManager(applicationContext){
+
+        }
+
+        startLockService()
+
         enableEdgeToEdge()
         setContent {
             MimoTheme {
-                val state by viewModel.state.collectAsState()
-                Nav(state, viewModel)
+//                val state by viewModel.state.collectAsState()
+//                Nav(state, viewModel)
+Text(text = "ts")
             }
         }
+
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun startLockService() {
+        lockServiceManager.start()
     }
 }
 

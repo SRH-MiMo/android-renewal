@@ -106,7 +106,7 @@ fun AlarmSettingScreen(navController: NavController) {
         Button(
             onClick = {
                 Toast.makeText(context, period + " "+ hour + " " + minute, Toast.LENGTH_SHORT).show()
-//                navController.navigate("LockScreen")
+                navController.navigate("LockScreen")
                 isAlarmSaved = true
             },
             modifier = Modifier
@@ -204,7 +204,6 @@ fun Picker(
 @Composable
 fun CommentInput(comment: TextFieldValue, onCommentChange: (TextFieldValue) -> Unit) {
     var isHintDisplayed by remember { mutableStateOf(true) }
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -225,7 +224,6 @@ fun CommentInput(comment: TextFieldValue, onCommentChange: (TextFieldValue) -> U
                     isHintDisplayed = !it.isFocused && comment.text.isEmpty()
                 }
         )
-
         if (isHintDisplayed) {
             Text(
                 text = "한마디 격언 입력",

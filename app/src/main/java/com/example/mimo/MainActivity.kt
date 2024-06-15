@@ -29,6 +29,7 @@ import com.example.mimo.screen.ChatPage
 import com.example.mimo.screen.Loginpage
 import com.example.mimo.screen.MainPage
 import com.example.mimo.screen.alarm.AlarmSettingScreen
+import com.example.mimo.screen.alarm.UnLockScreen
 import com.example.mimo.screen.chat.DreamScreen
 import com.example.mimo.screen.diary.AddDiaryScreen
 import com.example.mimo.screen.diary.DiaryScreen
@@ -50,6 +51,10 @@ val supabase = createSupabaseClient(
     install(Auth)
     install(Postgrest)
 }
+
+//
+
+
 
 
 class MainActivity : ComponentActivity() {
@@ -74,6 +79,9 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+
         enableEdgeToEdge()
         setContent {
             MimoTheme {
@@ -154,7 +162,9 @@ fun Nav(state: DiaryState, viewModel: DiaryViewModel) {
             composable("AlarmSettingScreen"){
                 AlarmSettingScreen(navController = navController)
             }
-
+            composable("UnLockScreen"){
+                UnLockScreen(navController = navController)
+            }
         }
     }
 }

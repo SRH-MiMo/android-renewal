@@ -107,7 +107,7 @@ fun MainPage(navController: NavController) {
                             fontWeight = FontWeight.Bold
                         )
                     )
-                
+
                 }
             }
         }

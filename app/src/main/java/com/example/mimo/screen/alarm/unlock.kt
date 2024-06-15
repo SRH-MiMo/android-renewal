@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -18,11 +19,14 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-
+import com.example.lockscreen.LockScreen
+import com.example.mimo.ui.theme.PurpleEnd
+import com.example.mimo.ui.theme.PurpleStart
 
 @Composable
-fun LockScreenUI(onUnlock: (String) -> Unit) {
+fun UnLockScreen(navController: NavController) {
     var password by remember { mutableStateOf("") } // 비밀번호를 저장하는 상태 변수
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { // Box에 contentAlignment을 사용하여 가운데 정렬
@@ -38,7 +42,6 @@ fun LockScreenUI(onUnlock: (String) -> Unit) {
                     fontWeight = FontWeight.Bold
                 )
             )
-
             TextField(
                 value = TextFieldValue(password),
                 onValueChange = { newPassword -> password = newPassword.text },
@@ -60,29 +63,40 @@ fun LockScreenUI(onUnlock: (String) -> Unit) {
                 ),
 
                 )
-
-
-            Button(
-                onClick = { onUnlock(password) }, // 버튼 클릭 시 비밀번호 전달
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp) // 버튼의 높이를 조정합니다.
-                    .padding(horizontal = 32.dp),
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFD11091),
-                    contentColor = Color.White
-                )
+                    .padding(16.dp)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(PurpleStart, PurpleEnd)
+                        ),
+                        shape = RoundedCornerShape(10.dp)
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Text("잠금 해제")
+                Button(
+                    onClick = {  }, // 버튼 클릭 시 비밀번호 전달
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp) // 버튼의 높이를 조정합니다.
+                        .padding(horizontal = 32.dp),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = Color.White),
+                ) {
+                    Text(
+                        "잠금 해제"
+                    )
+                }
             }
+
         }
     }
 }
-
-
 @Preview
 @Composable
-fun lockScreenPreview() {
-    LockScreenUI(onUnlock = {})
+fun UnLockScreenPreview() {
+    val navController = rememberNavController()
+    UnLockScreen( navController = navController)
+
 }

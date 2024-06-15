@@ -7,7 +7,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Icon
@@ -23,15 +22,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-
 import androidx.compose.ui.unit.IntOffset
-
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.mimo.R
-import com.example.mimo.screen.setting.SettingScreen
+
 @Composable
 fun LockScreen(navController: NavController) {
     Box(
@@ -56,13 +53,13 @@ fun LockScreen(navController: NavController) {
                 modifier = Modifier.size(300.dp)
             )
             Spacer(modifier = Modifier.height(50.dp))
-            SlideToUnlock()
+            SlideToUnlock(navController)
         }
     }
 }
 
 @Composable
-fun SlideToUnlock() {
+fun SlideToUnlock(navController: NavController) {
     var offsetX by remember { mutableStateOf(0f) }
     val density = LocalDensity.current
 
@@ -95,6 +92,11 @@ fun SlideToUnlock() {
                     detectHorizontalDragGestures { change, dragAmount ->
                         change.consume()
                         offsetX = (offsetX + dragAmount).coerceIn(0f, with(density) { 300.dp.toPx() - 50.dp.toPx() })
+
+                        // 슬라이드가 끝까지 되었을 때 네비게이션
+                        if (offsetX >= with(density) { 300.dp.toPx() - 50.dp.toPx() }) {
+                            navController.navigate("UnLockScreen")
+                        }
                     }
                 }
                 .zIndex(1f),
@@ -119,5 +121,3 @@ fun LockscreenPreview() {
         LockScreen(navController = navController)
     }
 }
-
-

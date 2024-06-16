@@ -300,6 +300,8 @@ fun addAlarm(
                     pIntent
                 )
                 Toast.makeText(context, "정확한 알람이 설정됨", Toast.LENGTH_SHORT).show()
+                navController.navigate("BellPage")
+
             } else {
                 requestExactAlarmPermission(context)
                 Toast.makeText(context, "정확한 알람 설정을 위해 권한이 필요합니다.", Toast.LENGTH_SHORT).show()

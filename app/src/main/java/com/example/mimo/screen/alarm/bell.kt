@@ -3,6 +3,7 @@ package com.example.mimo.screen.alarm
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -40,14 +41,21 @@ import com.example.mimo.screen.diary.model.DiaryEvent
 import com.example.mimo.ui.theme.PurpleEnd
 import com.example.mimo.ui.theme.PurpleStart
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 val localDate: LocalDate = LocalDate.now()
+@RequiresApi(Build.VERSION_CODES.O)
+val localTime = LocalTime.now()
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BellScreen(navController: NavController) {
+
+
+
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -64,7 +72,9 @@ fun BellScreen(navController: NavController) {
             modifier = Modifier.padding(bottom = 16.dp)
         )
         Text(
-            text = "07" + ":" + "00",
+            text = localTime.format(
+                DateTimeFormatter.ofPattern("HH:mm")
+            ).toString(),
             color = Color.White,
             fontSize = 80.sp,
             fontWeight = FontWeight.Bold,

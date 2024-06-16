@@ -7,34 +7,50 @@ import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Build
+import android.os.PowerManager
 import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import java.time.format.DateTimeFormatter
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,9 +123,10 @@ fun AlarmSettingScreen(navController: NavController) {
         // 저장하기 버튼
         Button(
             onClick = {
-                Toast.makeText(context, period + " "+ hour + " " + minute, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, period + " " + hour + " " + minute, Toast.LENGTH_SHORT)
+                    .show()
                 isAlarmSaved = true
-                addAlarm(context, hour, minute, period)
+                addAlarm(context, hour, minute, period, comment, navController)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -248,7 +265,14 @@ private fun requestExactAlarmPermission(context: Context) {
     context.startActivity(intent)
 }
 
-fun addAlarm(context: Context, hour: Int, minute: Int, period: String) {
+fun addAlarm(
+    context: Context,
+    hour: Int,
+    minute: Int,
+    period: String,
+    comment: TextFieldValue,
+    navController: NavController
+) {
     Toast.makeText(context, "알람 예약 함수 실행됨", Toast.LENGTH_SHORT).show()
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, AlarmReceiver::class.java)
@@ -287,6 +311,11 @@ fun addAlarm(context: Context, hour: Int, minute: Int, period: String) {
                 pIntent
             )
             Toast.makeText(context, "정확한 알람이 설정됨", Toast.LENGTH_SHORT).show()
+
+            // 화면 꺼지고 키면 락페이지 되어있는거
+
+            // 화면 켜졌을때 가장 마지막 실행 되어있는거 이걸로 해주기
+            navController.navigate("BellPage")
         }
     } catch (e: SecurityException) {
         Toast.makeText(context, "알람 설정 권한이 필요합니다: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -298,10 +327,23 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent != null) {
             // 넘어가는 로직 만드셈
+
+            val powerManager = context!!.getSystemService(Context.POWER_SERVICE) as PowerManager
+            val wakeLock = powerManager.newWakeLock(
+                PowerManager.FULL_WAKE_LOCK or
+                        PowerManager.ACQUIRE_CAUSES_WAKEUP or
+                        PowerManager.ON_AFTER_RELEASE, "My:Tag"
+            )
+            // 켜서 전원 켜버리기
+            wakeLock.acquire(5000)
+
+            Toast.makeText(context, "파워매니져 슛", Toast.LENGTH_SHORT).show()
+
+            //파워매니져 off
+            wakeLock.release()
         }
     }
 }
-
 
 
 @Preview(showBackground = true)

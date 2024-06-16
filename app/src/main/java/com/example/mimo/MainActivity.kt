@@ -1,37 +1,19 @@
 package com.example.mimo
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier // 수정: Modifier import 추가
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.lockscreen.LockScreen
 import androidx.room.Room
-import com.example.mimo.component.BottomNavigation
 import com.example.mimo.data.Diary.DiariesDatabase
-import com.example.mimo.screen.ChatPage
-import com.example.mimo.screen.Loginpage
-import com.example.mimo.screen.MainPage
 import com.example.mimo.screen.alarm.AlarmSettingScreen
-import com.example.mimo.screen.alarm.BellScreen
-import com.example.mimo.screen.alarm.UnLockScreen
-import com.example.mimo.screen.alarm.WakeUpPage
 import com.example.mimo.screen.chat.DreamScreen
 import com.example.mimo.screen.diary.AddDiaryScreen
 import com.example.mimo.screen.diary.DiaryScreen
@@ -45,15 +27,30 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.postgrest.Postgrest
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.example.lockscreen.LockScreen
+import com.example.mimo.component.BottomNavigation
+import com.example.mimo.screen.ChatPage
+import com.example.mimo.screen.Loginpage
+import com.example.mimo.screen.MainPage
+import com.example.mimo.screen.alarm.BellScreen
+import com.example.mimo.screen.alarm.UnLockScreen
+import com.example.mimo.screen.alarm.WakeUpPage
 
 val supabase = createSupabaseClient(
-    supabaseUrl = BuildConfig.SUPABASE_URL, //BuildConfig.SUPABASE_URL,
-    supabaseKey = BuildConfig.SUPABASE_ANON_KEY, //BuildConfig.SUPABASE_ANON_KEY
+    supabaseUrl = BuildConfig.SUPABASE_URL,
+    supabaseKey = BuildConfig.SUPABASE_ANON_KEY
 ) {
     install(Auth)
     install(Postgrest)
 }
-
 
 class MainActivity : ComponentActivity() {
     private val database by lazy {
@@ -78,8 +75,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
         enableEdgeToEdge()
         setContent {
             MimoTheme {
@@ -95,10 +90,8 @@ class MainActivity : ComponentActivity() {
 fun Nav(state: DiaryState, viewModel: DiaryViewModel) {
     val navController = rememberNavController()
 
-    // 유저 로그인 정보 (비 로그인시 null)
     val session = supabase.auth.currentSessionOrNull()
 
-    //첫 시작 위치 결정
     val startDestination = if (session?.user != null) {
         "MainPage"
     } else {
@@ -154,19 +147,19 @@ fun Nav(state: DiaryState, viewModel: DiaryViewModel) {
             composable("AccountPage") {
                 AccountScreen(navController = navController)
             }
-            composable("LockScreen"){
+            composable("LockScreen") {
                 LockScreen(navController = navController)
             }
-            composable("AlarmSettingScreen"){
+            composable("AlarmSettingScreen") {
                 AlarmSettingScreen(navController = navController)
             }
-            composable("UnLockScreen"){
+            composable("UnLockScreen") {
                 UnLockScreen(navController = navController)
             }
-            composable("WakeUp"){
+            composable("WakeUp") {
                 WakeUpPage(navController = navController)
             }
-            composable("BellPage"){
+            composable("BellPage") {
                 BellScreen(navController = navController)
             }
         }

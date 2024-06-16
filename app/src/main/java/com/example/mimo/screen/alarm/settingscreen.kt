@@ -34,19 +34,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.lockscreen.LockActivity
 import com.example.mimo.MainActivity
 import java.time.format.DateTimeFormatter
 
-class LockReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        val activityIntent = Intent(context, MainActivity::class.java)
-        activityIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        activityIntent.putExtra("showBellScreen", true)
-        context?.startActivity(activityIntent)
-    }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AlarmSettingScreen(navController: NavController) {
 
@@ -257,6 +250,9 @@ private fun requestExactAlarmPermission(context: Context) {
     context.startActivity(intent)
 }
 
+
+
+@RequiresApi(Build.VERSION_CODES.O)
 fun addAlarm(context: Context, hour: Int, minute: Int, period: String) {
     Toast.makeText(context, "알람 예약 함수 실행됨", Toast.LENGTH_SHORT).show()
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -302,17 +298,19 @@ fun addAlarm(context: Context, hour: Int, minute: Int, period: String) {
     }
 }
 
-
+// 알람 리시버
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent != null) {
-            // 넘어가는 로직 만드셈
+        if (context != null) {
+            val lockIntent = Intent(context, LockActivity::class.java)
+            lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            context.startActivity(lockIntent)
         }
     }
 }
 
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {

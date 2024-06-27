@@ -173,7 +173,7 @@ fun GoogleSignInButton(navController: NavController) {
                     nonce = rawNonce
                 }
 
-                navController.navigate("MainPage")
+                navController.navigate("MainHost")
 
                 Toast.makeText(context, "you are signed in!", Toast.LENGTH_SHORT).show()
             } catch (e: GetCredentialException) {

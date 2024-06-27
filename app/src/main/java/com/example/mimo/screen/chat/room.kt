@@ -1,4 +1,3 @@
-
 package com.example.mimo.screen.chat
 
 import androidx.compose.ui.graphics.Brush
@@ -69,7 +68,7 @@ fun DreamScreen(dreamViewModel: DreamViewModel = viewModel(), navController: Nav
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+
     ) {
         LazyColumn(
             modifier = Modifier.weight(1f),
@@ -208,5 +207,5 @@ fun DreamViewModel.sendDreamMessage(message: String, onComplete: (String) -> Uni
 @Composable
 fun PreviewDreamScreen() {
     val navController = rememberNavController()
-    DreamScreen(dreamViewModel = DreamViewModel(), navController = navController)
+//    DreamScreen(dreamViewModel = DreamViewModel(), navController = navController)
 }

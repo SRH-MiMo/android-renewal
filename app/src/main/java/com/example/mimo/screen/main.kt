@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mimo.component.TopBar
 import com.example.mimo.R
 import androidx.compose.ui.text.TextStyle
+import com.example.mimo.component.BottomNavigation
 import com.example.mimo.supabase
 import com.example.mimo.ui.theme.PurpleEnd
 import com.example.mimo.ui.theme.PurpleStart
@@ -47,14 +50,14 @@ import io.github.jan.supabase.gotrue.providers.builtin.IDToken
 @Composable
 fun MainPage(navController: NavController) {
     Surface(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         TopBar(name = "미라클 모닝 시작하기")
         Column(
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+            horizontalAlignment = Alignment.CenterHorizontally,
+
+            ) {
             Image(
                 modifier = Modifier
                     .width(350.dp)
@@ -125,5 +128,5 @@ fun MainPage(navController: NavController) {
 fun MainPreView() {
     // Create a fake NavController for preview purposes
     val navController = rememberNavController()
-    MainPage(navController = navController)
+//    MainPage(navController = navController, inPadding )
 }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -43,7 +44,7 @@ import com.example.mimo.R
 fun ChatPage(navController: NavController) {
     Surface(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
     ) {
         TopBar(name = "채팅 꿈 해몽")
         Column(
@@ -119,5 +120,5 @@ fun ChatPage(navController: NavController) {
 fun ChatPreview() {
     // Create a fake NavController for preview purposes
     val navController = rememberNavController()
-    ChatPage(navController = navController)
+//    ChatPage(navController = navController)
 }

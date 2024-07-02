@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">미모 - 미라클모닝을 찾아서</string>
+    <string name="lock_screen_description">look_test</string>
 </resources>

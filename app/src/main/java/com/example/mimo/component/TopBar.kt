@@ -37,7 +37,7 @@ fun TopBar(name: String) {
         Text(
             text = name,
             style = TextStyle(
-                fontSize = 25.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )

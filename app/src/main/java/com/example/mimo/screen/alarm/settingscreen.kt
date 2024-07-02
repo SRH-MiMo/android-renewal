@@ -1,231 +1,349 @@
-    package com.example.mimo.screen.alarm
+package com.example.mimo.screen.alarm
 
-    import android.os.Bundle
-
-    import androidx.activity.ComponentActivity
-    import androidx.activity.compose.setContent
-    import androidx.compose.foundation.Image
-    import androidx.compose.foundation.background
-    import androidx.compose.foundation.clickable
-    import androidx.compose.foundation.layout.*
-    import androidx.compose.foundation.text.BasicTextField
-    import androidx.compose.foundation.text.KeyboardOptions
-    import androidx.compose.material3.*
-    import androidx.compose.runtime.*
-    import androidx.compose.ui.Alignment
-    import androidx.compose.ui.Modifier
-    import androidx.compose.ui.focus.onFocusChanged
-    import androidx.compose.ui.graphics.Color
-    import androidx.compose.ui.text.input.TextFieldValue
-    import androidx.compose.ui.text.input.ImeAction
-    import androidx.compose.ui.unit.dp
-    import androidx.compose.ui.unit.sp
-    import androidx.compose.ui.text.font.FontWeight
-    import androidx.compose.ui.tooling.preview.Preview
-    import androidx.compose.ui.text.TextStyle
-    import androidx.compose.ui.graphics.Brush
-    import androidx.compose.ui.res.painterResource
-    import androidx.navigation.NavController
-    import androidx.navigation.NavHostController
-    import androidx.navigation.compose.rememberNavController
-    import com.example.mimo.R
-
-    class MainActivity : ComponentActivity() {
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContent {
-                val navController = rememberNavController()
-                AlarmSettingScreen(navController = navController)
-            }
-        }
-    }
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun AlarmSettingScreen(navController: NavController) {
-        var hour by remember { mutableStateOf(7) }
-        var minute by remember { mutableStateOf(0) }
-        var period by remember { mutableStateOf("오전") }
-        var comment by remember { mutableStateOf(TextFieldValue("")) }
-        var isAlarmSaved by remember { mutableStateOf(false) } // 저장 버튼이 눌렸는지 여부를 추적하는 상태
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFF121212)) // 배경색 설정
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // 상단 타이틀
-            Text(
-                text = "알람 설정",
-                fontSize = 24.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
-            // 시간 선택 섹션
-            Text(
-                text = "기상시간 설정",
-                fontSize = 18.sp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            AlarmTimePicker(
-                hour = hour,
-                minute = minute,
-                period = period,
-                onHourChange = { hour = it },
-                onMinuteChange = { minute = it },
-                onPeriodChange = { period = it }
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // 격언 입력 섹션
-            Text(
-                text = "격언 설정",
-                fontSize = 18.sp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            CommentInput(
-                comment = comment,
-                onCommentChange = { comment = it }
-            )
-
-            Text(
-                text = "설정하신 격언은 화면 잠금 해제에 사용됩니다",
-                fontSize = 12.sp,
-                color = Color.Magenta,
-                modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
-            )
-
-            // 저장하기 버튼
-            Button(
-                onClick = {
-                    // 저장하기 버튼을 클릭하면 알람 설정을 저장하고, 잠금 화면으로 전환됩니다.
-                    isAlarmSaved = true
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Magenta
-                )
-            ) {
-                Text(text = "저장하기", color = Color.White, fontSize = 16.sp)
-            }
-        }
-    }
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.icu.util.Calendar
+import android.os.Build
+import android.os.PowerManager
+import android.provider.Settings
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import android.media.MediaPlayer
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.Handler
+import android.os.Looper
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AlarmSettingScreen(mainNavController: NavController) {
 
-    @Composable
-    fun AlarmTimePicker(
-        hour: Int,
-        minute: Int,
-        period: String,
-        onHourChange: (Int) -> Unit,
-        onMinuteChange: (Int) -> Unit,
-        onPeriodChange: (String) -> Unit
+    val context = LocalContext.current
+
+    var hour by remember { mutableStateOf(7) }
+    var minute by remember { mutableStateOf(0) }
+    var period by remember { mutableStateOf("오전") }
+    var comment by remember { mutableStateOf(TextFieldValue("")) }
+    var isAlarmSaved by remember { mutableStateOf(false) } // 저장 버튼이 눌렸는지 여부를 추적하는 상태
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF121212)) // 배경색 설정
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+        // 상단 타이틀
+        Text(
+            text = "알람 설정",
+            fontSize = 24.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        // 시간 선택 섹션
+        Text(
+            text = "기상시간 설정",
+            fontSize = 18.sp,
+            color = Color.White,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        AlarmTimePicker(
+            hour = hour,
+            minute = minute,
+            period = period,
+            onHourChange = { hour = it },
+            onMinuteChange = { minute = it },
+            onPeriodChange = { period = it }
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // 격언 입력 섹션
+        Text(
+            text = "격언 설정",
+            fontSize = 18.sp,
+            color = Color.White,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        CommentInput(
+            comment = comment,
+            onCommentChange = { comment = it }
+        )
+
+        Text(
+            text = "설정하신 격언은 화면 잠금 해제에 사용됩니다",
+            fontSize = 12.sp,
+            color = Color.Magenta,
+            modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
+        )
+
+        // 저장하기 버튼
+        Button(
+            onClick = {
+                Toast.makeText(context, period + " " + hour + "시 " + minute + "분", Toast.LENGTH_SHORT)
+                    .show()
+                isAlarmSaved = true
+                addAlarm(context, hour, minute, period, comment, mainNavController = mainNavController)
+            },
             modifier = Modifier
-                .background(Color.DarkGray, shape = MaterialTheme.shapes.medium)
-                .padding(16.dp)
                 .fillMaxWidth()
+                .height(50.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Magenta
+            )
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = "오전",
-                    color = if (period == "오전") Color.White else Color.Gray,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .clickable { onPeriodChange("오전") }
-                        .padding(vertical = 8.dp)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "오후",
-                    color = if (period == "오후") Color.White else Color.Gray,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .clickable { onPeriodChange("오후") }
-                        .padding(vertical = 8.dp)
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = String.format("%02d", hour),
-                color = Color.White,
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-            Text(
-                text = ":",
-                color = Color.White,
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = String.format("%02d", minute),
-                color = Color.White,
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
+            Text(text = "저장하기", color = Color.White, fontSize = 16.sp)
         }
     }
+}
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun CommentInput(comment: TextFieldValue, onCommentChange: (TextFieldValue) -> Unit) {
-        var isHintDisplayed by remember { mutableStateOf(true) }
+@Composable
+fun AlarmTimePicker(
+    hour: Int,
+    minute: Int,
+    period: String,
+    onHourChange: (Int) -> Unit,
+    onMinuteChange: (Int) -> Unit,
+    onPeriodChange: (String) -> Unit
+) {
+    val hours = (1..12).map { it.toString().padStart(2, '0') }
+    val minutes = (0..59).map { it.toString().padStart(2, '0') }
+    val periods = listOf("오전", "오후")
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.DarkGray, shape = MaterialTheme.shapes.medium)
-                .padding(8.dp)
-        ) {
-            BasicTextField(
-                value = comment,
-                onValueChange = {
-                    onCommentChange(it)
-                    isHintDisplayed = it.text.isEmpty()
-                },
-                textStyle = TextStyle(color = Color.White),
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .background(Color.DarkGray, shape = MaterialTheme.shapes.medium)
+            .padding(16.dp)
+            .fillMaxWidth()
+    ) {
+        Picker(
+            items = periods,
+            selectedIndex = periods.indexOf(period),
+            onItemSelected = { onPeriodChange(periods[it]) },
+            modifier = Modifier.weight(1f)
+        )
+        Picker(
+            items = hours,
+            selectedIndex = if (hour % 12 == 0) 11 else (hour % 12) - 1,
+            onItemSelected = { onHourChange(if (period == "오전") it + 1 else it + 13) },
+            modifier = Modifier.weight(1f)
+        )
+        Picker(
+            items = minutes,
+            selectedIndex = minute,
+            onItemSelected = { onMinuteChange(it) },
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
+fun Picker(
+    items: List<String>,
+    selectedIndex: Int,
+    onItemSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var currentIndex by remember { mutableStateOf(selectedIndex) }
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(currentIndex) {
+        listState.animateScrollToItem(currentIndex)
+    }
+
+    LazyColumn(
+        state = listState,
+        modifier = modifier.height(150.dp)
+    ) {
+        itemsIndexed(items) { index, item ->
+            Text(
+                text = item,
+                color = if (index == currentIndex) Color.White else Color.Gray,
+                fontSize = if (index == currentIndex) 24.sp else 20.sp,
+                fontWeight = if (index == currentIndex) FontWeight.Bold else FontWeight.Normal,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = if (isHintDisplayed) 16.dp else 0.dp)
-                    .onFocusChanged {
-                        isHintDisplayed = !it.isFocused && comment.text.isEmpty()
+                    .clickable {
+                        currentIndex = index
+                        onItemSelected(index)
                     }
+                    .padding(vertical = 8.dp),
+                textAlign = TextAlign.Center
             )
-
-            if (isHintDisplayed) {
-                Text(
-                    text = "한마디 격언 입력",
-                    color = Color.Gray,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-            }
         }
     }
+}
 
-
-    @Preview(showBackground = true)
-    @Composable
-    fun DefaultPreview() {
-        val navController = rememberNavController()
-        AlarmSettingScreen(navController = navController)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CommentInput(comment: TextFieldValue, onCommentChange: (TextFieldValue) -> Unit) {
+    var isHintDisplayed by remember { mutableStateOf(true) }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.DarkGray, shape = MaterialTheme.shapes.medium)
+            .padding(8.dp)
+    ) {
+        BasicTextField(
+            value = comment,
+            onValueChange = {
+                onCommentChange(it)
+                isHintDisplayed = it.text.isEmpty()
+            },
+            textStyle = TextStyle(color = Color.White),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = if (isHintDisplayed) 16.dp else 0.dp)
+                .onFocusChanged {
+                    isHintDisplayed = !it.isFocused && comment.text.isEmpty()
+                }
+        )
+        if (isHintDisplayed) {
+            Text(
+                text = "한마디 격언 입력",
+                color = Color.Gray,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.S)
+private fun canScheduleExactAlarms(context: Context): Boolean {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    return alarmManager.canScheduleExactAlarms()
+}
+
+@RequiresApi(Build.VERSION_CODES.S)
+private fun requestExactAlarmPermission(context: Context) {
+    val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+    context.startActivity(intent)
+}
+
+fun addAlarm(
+    context: Context,
+    hour: Int,
+    minute: Int,
+    period: String,
+    comment: TextFieldValue,
+    mainNavController: NavController
+) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmReceiver::class.java)
+    val pIntent = PendingIntent.getBroadcast(
+        context, 0, intent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    val cal = Calendar.getInstance().apply {
+        timeInMillis = System.currentTimeMillis()
+        set(Calendar.HOUR_OF_DAY, if (period == "오전") hour % 12 else (hour % 12) + 12)
+        set(Calendar.MINUTE, minute)
+        set(Calendar.SECOND, 0)
+        if (before(Calendar.getInstance())) {
+            add(Calendar.DAY_OF_MONTH, 1)
+        }
+    }
+    try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (canScheduleExactAlarms(context)) {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    cal.timeInMillis,
+                    pIntent
+                )
+                mainNavController.navigate("LockScreen")
+            } else {
+                requestExactAlarmPermission(context)
+                Toast.makeText(context, "정확한 알람 설정을 위해 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                cal.timeInMillis,
+                pIntent
+            )
+        }
+    } catch (e: SecurityException) {
+        Toast.makeText(context, "알람 설정 권한이 필요합니다: ${e.message}", Toast.LENGTH_SHORT).show()
+    }
+}
+
+
+class AlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        if (intent != null) {
+            // 넘어가는 로직 만드셈
+            val powerManager = context!!.getSystemService(Context.POWER_SERVICE) as PowerManager
+            val wakeLock = powerManager.newWakeLock(
+                PowerManager.FULL_WAKE_LOCK or
+                        PowerManager.ACQUIRE_CAUSES_WAKEUP or
+                        PowerManager.ON_AFTER_RELEASE, "My:Tag"
+            )
+            // 켜서 전원 켜버리기
+            wakeLock.acquire(5000)
+
+
+            //파워매니져 off
+            wakeLock.release()
+        }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    val navController = rememberNavController()
+//    AlarmSettingScreen(navController = navController)
+}

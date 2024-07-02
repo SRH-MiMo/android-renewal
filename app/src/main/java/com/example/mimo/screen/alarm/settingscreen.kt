@@ -51,6 +51,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import android.media.MediaPlayer
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.Handler
+import android.os.Looper
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -327,6 +332,7 @@ class AlarmReceiver : BroadcastReceiver() {
             )
             // 켜서 전원 켜버리기
             wakeLock.acquire(5000)
+
 
             //파워매니져 off
             wakeLock.release()

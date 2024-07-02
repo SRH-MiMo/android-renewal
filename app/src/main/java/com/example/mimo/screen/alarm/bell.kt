@@ -1,43 +1,31 @@
 package com.example.mimo.screen.alarm
 
-
+import android.content.Context
+import android.media.MediaPlayer
 import android.os.Build
-import android.os.Bundle
-import android.util.Log
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.mimo.R
-import com.example.mimo.screen.diary.model.DiaryEvent
 import com.example.mimo.ui.theme.PurpleEnd
 import com.example.mimo.ui.theme.PurpleStart
 import java.time.LocalDate
@@ -52,9 +40,27 @@ val localTime = LocalTime.now()
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BellScreen(navController: NavController) {
+    val context = LocalContext.current
 
+    // Start vibration and sound when the screen is displayed
+    LaunchedEffect(Unit) {
+        // Vibration
+        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(500)
+        }
 
+        // Sound
+        val mediaPlayer = MediaPlayer.create(context, R.raw.alarm_sound) // Make sure you have an alarm_sound.mp3 in res/raw
+        mediaPlayer.start()
 
+        // Clean up the media player after sound has played
+        mediaPlayer.setOnCompletionListener { player ->
+            player.release()
+        }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -113,7 +119,7 @@ fun BellScreen(navController: NavController) {
                     text = "중단",
                     style = TextStyle(
                         fontSize = 20.sp,
-                        color = Color.White, // Assuming white text color
+                        color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
                 )
@@ -130,7 +136,6 @@ fun BellScreen(navController: NavController) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun BellscreenPreview() {

@@ -64,7 +64,7 @@ fun BellScreen(navController: NavController) {
         )
         Text(
             text = localDate.format(
-                DateTimeFormatter.ofPattern("MM월 dd일 ")
+                DateTimeFormatter.ofPattern("MM월 dd일")
             ).toString() + "오후",
             color = Color.White,
             fontSize = 24.sp,

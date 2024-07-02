@@ -7,8 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Build
+import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
+import android.telephony.SmsMessage
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -51,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.mimo.MainActivity
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,10 +126,21 @@ fun AlarmSettingScreen(mainNavController: NavController) {
         // 저장하기 버튼
         Button(
             onClick = {
-                Toast.makeText(context, period + " " + hour + "시 " + minute + "분", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    context,
+                    period + " " + hour + "시 " + minute + "분",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
                 isAlarmSaved = true
-                addAlarm(context, hour, minute, period, comment, mainNavController = mainNavController)
+                addAlarm(
+                    context,
+                    hour,
+                    minute,
+                    period,
+                    comment,
+                    mainNavController = mainNavController
+                )
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -297,7 +311,6 @@ fun addAlarm(
                     cal.timeInMillis,
                     pIntent
                 )
-                mainNavController.navigate("LockScreen")
             } else {
                 requestExactAlarmPermission(context)
                 Toast.makeText(context, "정확한 알람 설정을 위해 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
@@ -318,6 +331,8 @@ fun addAlarm(
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent != null) {
+
+
             // 넘어가는 로직 만드셈
             val powerManager = context!!.getSystemService(Context.POWER_SERVICE) as PowerManager
             val wakeLock = powerManager.newWakeLock(
@@ -328,10 +343,12 @@ class AlarmReceiver : BroadcastReceiver() {
             // 켜서 전원 켜버리기
             wakeLock.acquire(5000)
 
+
             //파워매니져 off
             wakeLock.release()
         }
     }
+
 }
 
 

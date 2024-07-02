@@ -1,6 +1,8 @@
 package com.example.mimo.screen
 
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -178,6 +180,7 @@ fun GoogleSignInButton(navController: NavController) {
                 Toast.makeText(context, "you are signed in!", Toast.LENGTH_SHORT).show()
             } catch (e: GetCredentialException) {
                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "GoogleSignInButton: ${e.message}")
 
             } catch (e: GoogleIdTokenParsingException) {
                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()

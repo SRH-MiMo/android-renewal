@@ -32,6 +32,7 @@ import com.example.mimo.ui.theme.PurpleStart
 @Composable
 fun UnLockScreen(navController: NavController, context: Context) {
     var password by remember { mutableStateOf("") } // 비밀번호를 저장하는 상태 변수
+    val keyword = "신개념 자살 종용쇼"
     Scaffold(
 
     ) { inPadding ->
@@ -66,7 +67,7 @@ fun UnLockScreen(navController: NavController, context: Context) {
                         ),
                     placeholder = {
                         Text(
-                            text = "'노콘질싸'를 입력해주세요.",
+                            text = "'${keyword}'를 입력해주세요.",
                             color = Color.Black.copy(alpha = 0.5f)
                         )
                     },
@@ -89,10 +90,10 @@ fun UnLockScreen(navController: NavController, context: Context) {
                 ) {
                     Button(
                         onClick = {
-                            if (password == "노콘질싸") {
+                            if (password == keyword) {
                                 navController.navigate("WakeUp")
                             } else {
-                                Toast.makeText(context, "노콘질사가 아님", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "$keyword 가 아닙니다", Toast.LENGTH_SHORT).show()
                             }
                         }, // 버튼 클릭 시 비밀번호 전달
                         modifier = Modifier

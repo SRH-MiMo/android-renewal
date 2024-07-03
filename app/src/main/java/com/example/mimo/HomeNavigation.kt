@@ -19,7 +19,6 @@ import com.example.mimo.screen.Loginpage
 import com.example.mimo.screen.MainPage
 import com.example.mimo.screen.alarm.AlarmSettingScreen
 import com.example.mimo.screen.alarm.BellScreen
-import com.example.mimo.screen.alarm.OffScreen
 import com.example.mimo.screen.alarm.UnLockScreen
 import com.example.mimo.screen.alarm.WakeUpPage
 import com.example.mimo.screen.chat.DreamScreen
@@ -86,13 +85,9 @@ fun HomeNavigation(state:DiaryState, viewModel:DiaryViewModel, mainNavController
                 AccountScreen(mainNavController = mainNavController)
             }
 
-            composable("BellPage") {
-                BellScreen(navController = navController)
-            }
 
-            composable("OffPage") {
-                OffScreen(navController = navController)
-            }
+
+
         }
     }
 }

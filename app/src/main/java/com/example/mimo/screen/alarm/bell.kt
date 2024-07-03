@@ -53,9 +53,6 @@ val localTime = LocalTime.now()
 @Composable
 fun BellScreen(navController: NavController) {
 
-
-
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

@@ -141,6 +141,8 @@ fun AlarmSettingScreen(mainNavController: NavController) {
                     comment,
                     mainNavController = mainNavController
                 )
+
+                mainNavController.navigate("LockScreen")
             },
             modifier = Modifier
                 .fillMaxWidth()

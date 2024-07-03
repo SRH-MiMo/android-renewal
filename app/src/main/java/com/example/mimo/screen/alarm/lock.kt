@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -51,7 +52,7 @@ fun LockScreen(navController: NavController) {
             Image(
                 painter = painterResource(id = R.drawable.sleepmoon),
                 contentDescription = null,
-                modifier = Modifier.size(300.dp)
+                modifier = Modifier.size(300.dp).clickable { navController.navigate("BellScreen") }
             )
             Spacer(modifier = Modifier.height(50.dp))
             SlideToUnlock(navController)

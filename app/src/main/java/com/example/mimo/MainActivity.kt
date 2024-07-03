@@ -18,6 +18,7 @@ import com.example.lockscreen.LockScreen
 import androidx.room.Room
 import com.example.mimo.data.Diary.DiariesDatabase
 import com.example.mimo.screen.Loginpage
+import com.example.mimo.screen.alarm.BellScreen
 import com.example.mimo.screen.alarm.UnLockScreen
 import com.example.mimo.screen.alarm.WakeUpPage
 import com.example.mimo.screen.diary.model.DiaryState
@@ -103,6 +104,9 @@ fun Nav(state: DiaryState, viewModel: DiaryViewModel) {
         }
         composable("LockScreen") {
             LockScreen(navController = navController)
+        }
+        composable("BellPage") {
+            BellScreen(navController = navController)
         }
     }
 }

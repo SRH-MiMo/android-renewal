@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun AccountScreen(navController: NavController) {
+fun AccountScreen(mainNavController: NavController) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -40,9 +40,9 @@ fun AccountScreen(navController: NavController) {
             try {
                 supabase.auth.signOut()
 
-                Toast.makeText(context, "로그아웃 됌", Toast.LENGTH_SHORT).show()
 
-                navController.navigate("LoginPage")
+
+                mainNavController.navigate("LoginPage")
             } catch (e: RestException) {
                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
 
@@ -125,6 +125,6 @@ fun DefaultPreview() {
         modifier = Modifier.fillMaxSize(),
         color = Color(0xFF121212) // 어두운 배경색
     ) {
-        AccountScreen(navController = navController)
+        AccountScreen(mainNavController = navController)
     }
 }

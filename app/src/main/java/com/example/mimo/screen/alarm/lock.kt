@@ -1,138 +1,125 @@
-//import android.graphics.Paint.Align
-//import android.text.Layout
-//import androidx.compose.foundation.Image
-//import androidx.compose.foundation.background
-//import androidx.compose.foundation.clickable
-//import androidx.compose.foundation.layout.*
-//import androidx.compose.foundation.shape.CircleShape
-//import androidx.compose.foundation.shape.RoundedCornerShape
-//import androidx.compose.material3.Surface
-//import androidx.compose.material3.Text
-//import androidx.compose.runtime.*
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.graphics.Brush
-//import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.platform.LocalDensity
-//import androidx.compose.ui.res.painterResource
-//import androidx.compose.ui.text.font.FontWeight
-//import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.unit.sp
-//import androidx.compose.ui.tooling.preview.Preview
-//import androidx.compose.ui.unit.times
-//import com.example.mimo.R
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun LockScreenWithSeekBar() {
-//    var progress by remember { mutableStateOf(50f) } // SeekBar의 기본값 설정 (0~100 범위)
-//
-//    Surface(
-//        modifier = Modifier.fillMaxSize(),
-//        color = Color.Black
-//    ) {
-//        Column(
-//            modifier = Modifier.fillMaxSize(),
-//            verticalArrangement = Arrangement.Top,
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//            Spacer(modifier = Modifier.height(32.dp))
-//            Text(
-//                text = "화면잠금중",
-//                color = Color.White,
-//                fontSize = 50.sp,
-//            )
-//            Spacer(modifier = Modifier.height(16.dp))
-//
-//            Image(
-//                modifier = Modifier
-//                    .width(350.dp)
-//                    .height(300.dp),
-//                painter = painterResource(id = R.drawable.sleepmoon),
-//                contentDescription = "잠금화면달"
-//            )
-//            Spacer(modifier = Modifier.height(40.dp))
-//
-//            // CustomSeekBar
-//            CustomSeekBar(
-//                progress = progress,
-//                onProgressChange = { newValue ->
-//                    progress = newValue
-//                },
-//                minValue = 0f,
-//                maxValue = 100f,
-//                thumbColor = Color.Red,
-//                trackColors = listOf(Color.Blue, Color.Gray),
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(horizontal = 16.dp)
-//            )
-//        }
-//    }
-//}
-//
-//@Composable
-//fun CustomSeekBar(
-//    progress: Float,
-//    onProgressChange: (Float) -> Unit,
-//    minValue: Float,
-//    maxValue: Float,
-//    thumbColor: Color,
-//    trackColors: List<Color>,
-//    modifier: Modifier = Modifier
-//) {
-//    val density = LocalDensity.current
-//    Box(
-//        modifier = modifier
-//            .fillMaxWidth()
-//            .height(40.dp)
-//            .background(
-//                Brush.linearGradient(
-//                    colors = trackColors,
-//                    start = Alignment.TopStart,
-//                    end = Alignment.TopEnd
-//                ),
-//                shape = RoundedCornerShape(4.dp)
-//            )
-//            .padding(16.dp)
-//    ) {
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically,
-//            horizontalArrangement = Arrangement.SpaceBetween
-//        ) {
-//            Box(
-//                modifier = Modifier
-//                    .size(20.dp)
-//                    .background(thumbColor, shape = CircleShape)
-//                    .offset( // Use offset with both x and y values
-//                        x = (progress * (density.run { Modifier.fillMaxWidth().width.toDp() - 20.dp.toPx() })),
-//                        y = 0.dp
-//                    )
-//            )
-//
-//            Text(
-//                text = "${(progress * (maxValue - minValue) + minValue).toInt()}분",
-//                color = Color.White,
-//                fontWeight = FontWeight.Bold,
-//                fontSize = 16.sp
-//            )
-//        }
-//    }
-//
-//    // Handle dragging to update the progress
-//    modifier.clickable { offset ->
-//        val x = offset.x
-//        val progressValue = (x / (density.run { Modifier.fillMaxWidth().width.toDp() - 20.dp.toPx() })) * (maxValue - minValue) + minValue
-//        onProgressChange(progressValue)
-//    }
-//}
-//
-//
-//
-//
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun LockScreenWithSeekBarPreview() {
-//    LockScreenWithSeekBar()
-//}
+package com.example.lockscreen
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
+import com.example.mimo.R
+
+@Composable
+fun LockScreen(navController: NavController) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "화면 잠금 중",
+                color = Color.White,
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Image(
+                painter = painterResource(id = R.drawable.sleepmoon),
+                contentDescription = null,
+                modifier = Modifier.size(300.dp).clickable { navController.navigate("BellPage") }
+            )
+            Spacer(modifier = Modifier.height(50.dp))
+            SlideToUnlock(navController)
+        }
+    }
+}
+
+@Composable
+fun SlideToUnlock(navController: NavController) {
+    var offsetX by remember { mutableStateOf(0f) }
+    val density = LocalDensity.current
+
+    Box(
+        modifier = Modifier
+            .width(300.dp)
+            .height(50.dp)
+            .background(Color.Gray, shape = androidx.compose.foundation.shape.RoundedCornerShape(25.dp)),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "밀어서 격언 입력하기",
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Box(
+            modifier = Modifier
+                .offset { IntOffset(offsetX.toInt(), 0) }
+                .size(50.dp)
+                .background(Color.Magenta, shape = androidx.compose.foundation.shape.RoundedCornerShape(25.dp))
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures { change, dragAmount ->
+                        change.consume()
+                        offsetX = (offsetX + dragAmount).coerceIn(0f, with(density) { 300.dp.toPx() - 50.dp.toPx() })
+
+                        // 슬라이드가 끝까지 되었을 때 네비게이션
+                        if (offsetX >= with(density) { 300.dp.toPx() - 50.dp.toPx() }) {
+                            navController.navigate("UnLockScreen")
+                        }
+                    }
+                }
+                .zIndex(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowForward,
+                contentDescription = null,
+                tint = Color.White
+            )
+        }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun LockscreenPreview() {
+    val navController = rememberNavController()
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color(0xFF121212) // 어두운 배경색
+    ) {
+        LockScreen(navController = navController)
+    }
+}

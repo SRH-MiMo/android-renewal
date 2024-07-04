@@ -40,7 +40,7 @@ fun AccountScreen(mainNavController: NavController) {
             try {
                 supabase.auth.signOut()
 
-                Toast.makeText(context, "로그아웃 됌", Toast.LENGTH_SHORT).show()
+
 
                 mainNavController.navigate("LoginPage")
             } catch (e: RestException) {

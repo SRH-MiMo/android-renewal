@@ -77,7 +77,7 @@ fun Loginpage(navController: NavController) {
             Text(
                 text = "미모 - 미라클 모닝을 찾아서",
                 color = Color.White,
-                fontSize = 35.sp,
+                fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
@@ -177,7 +177,7 @@ fun GoogleSignInButton(navController: NavController) {
 
                 navController.navigate("MainHost")
 
-                Toast.makeText(context, "you are signed in!", Toast.LENGTH_SHORT).show()
+
             } catch (e: GetCredentialException) {
                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "GoogleSignInButton: ${e.message}")

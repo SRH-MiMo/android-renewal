@@ -93,6 +93,7 @@ fun Nav(state: DiaryState, viewModel: DiaryViewModel) {
         composable("ChatNested") {
             HomeNavigation(state, viewModel, mainNavController = navController, destination = "ChatPage", index = 2)
         }
+
         composable("UnLockScreen") {
             UnLockScreen(navController = navController, context = LocalContext.current)
         }

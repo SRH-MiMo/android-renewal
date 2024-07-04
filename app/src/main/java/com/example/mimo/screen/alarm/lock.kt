@@ -52,7 +52,7 @@ fun LockScreen(navController: NavController) {
             Image(
                 painter = painterResource(id = R.drawable.sleepmoon),
                 contentDescription = null,
-                modifier = Modifier.size(300.dp).clickable { navController.navigate("BellScreen") }
+                modifier = Modifier.size(300.dp).clickable { navController.navigate("BellPage") }
             )
             Spacer(modifier = Modifier.height(50.dp))
             SlideToUnlock(navController)

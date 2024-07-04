@@ -126,12 +126,6 @@ fun AlarmSettingScreen(mainNavController: NavController) {
         // 저장하기 버튼
         Button(
             onClick = {
-                Toast.makeText(
-                    context,
-                    period + " " + hour + "시 " + minute + "분",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
                 isAlarmSaved = true
                 addAlarm(
                     context,
